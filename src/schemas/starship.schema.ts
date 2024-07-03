@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IStarship } from "../interfaces/IStarship";
+import { IStarship } from "../../interfaces/IStarship";
 
 export const starshipSchema = new Schema<IStarship>({
   name: { type: String, required: true },
