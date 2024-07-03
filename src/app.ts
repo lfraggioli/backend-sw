@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { fetchAll } from "./handlers/db/fetchAll";
+import router from "./routes";
 
 const app = express();
 const PORT = 3000;
@@ -9,12 +10,13 @@ app.get("/", (req, res) => {
   res.send("API de Star Wars está funcionando!");
 });
 
-// Asegúrate de incluir el nombre de tu base de datos en la URL
+app.use(express.json());
+app.use(router);
+
 const MONGODB_URL =
   "mongodb+srv://fraggiolilucas:fraggiolilucas@cluster0.l3skzfn.mongodb.net/";
 
 mongoose.Promise = Promise;
-// Maneja la conexión de manera asíncrona
 mongoose
   .connect(MONGODB_URL)
   .then(() => {
