@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { IPlanet } from "../../interfaces/IPlanet";
+import { IPlanet } from "../interfaces/IPlanet";
 // Importa las otras interfaces aquí
 
 // Esquema para IPlanet

@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IPeople } from "../../interfaces/IPeople";
+import { IPeople } from "../interfaces/IPeople";
 
 export const peopleSchema = new Schema<IPeople>({
   name: { type: String, required: true },

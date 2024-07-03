@@ -1,5 +1,5 @@
 import { Schema } from "mongoose";
-import { IFilm } from "../../interfaces/IFilm";
+import { IFilm } from "../interfaces/IFilm";
 
 export const filmSchema = new Schema<IFilm>({
   title: { type: String, required: true },

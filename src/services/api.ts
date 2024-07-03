@@ -17,7 +17,6 @@ export const fetchPlanets = async (): Promise<IPlanet[]> => {
   }
 };
 
-// Funciones de Formateo
 function formatPlanetsData(apiResponse: any): IPlanet[] {
   return apiResponse.results.map((planetData: any) => {
     // Crea una instancia del modelo PlanetModel para cada planeta

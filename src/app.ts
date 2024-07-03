@@ -1,10 +1,40 @@
 import express from "express";
+import mongoose from "mongoose";
+import { fetchAll } from "./handlers/db/fetchAll";
 
 const app = express();
 const PORT = 3000;
 
 app.get("/", (req, res) => {
   res.send("API de Star Wars está funcionando!");
+});
+
+// Asegúrate de incluir el nombre de tu base de datos en la URL
+const MONGODB_URL =
+  "mongodb+srv://fraggiolilucas:fraggiolilucas@cluster0.l3skzfn.mongodb.net/";
+
+mongoose.Promise = Promise;
+// Maneja la conexión de manera asíncrona
+mongoose
+  .connect(MONGODB_URL)
+  .then(() => {
+    console.log("Conexión a MongoDB exitosa");
+  })
+  .catch((error) => console.error("Error al conectar a MongoDB:", error));
+mongoose.connection.on("connected", () => {
+  console.log("Mongoose está conectado al servidor de MongoDB");
+  fetchAll()
+    .then(() =>
+      console.log(
+        "Todas las funciones de búsqueda y almacenamiento se han ejecutado con éxito."
+      )
+    )
+    .catch((error) =>
+      console.error(
+        "Error al ejecutar las funciones de búsqueda y almacenamiento:",
+        error
+      )
+    );
 });
 
 app.listen(PORT, () => {
