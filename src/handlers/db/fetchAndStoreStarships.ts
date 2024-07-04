@@ -1,11 +1,11 @@
 import axios from "axios";
 import { StarshipModel } from "../../models/starship.model";
-import cron from "node-cron";
+
 async function fetchAndStoreStarships() {
   const count = await StarshipModel.countDocuments();
   if (count > 0) {
     console.log("Starships already stored. Skipping fetch and store.");
-    return; // Salir de la función si ya hay datos almacenados
+    return;
   }
   let nextPageUrl = "https://swapi.dev/api/starships/";
 
@@ -16,6 +16,32 @@ async function fetchAndStoreStarships() {
       nextPageUrl = response.data.next;
 
       for (const starship of starships) {
+        // Fetch pilot names
+        const pilotNames = await Promise.all(
+          starship.pilots.map(async (pilotUrl: string) => {
+            try {
+              const pilotResponse = await axios.get(pilotUrl);
+              return pilotResponse.data.name;
+            } catch (error) {
+              console.error("Error fetching pilot:", error);
+              return null;
+            }
+          })
+        ).then((names) => names.filter((name) => name !== null));
+
+        // Fetch film titles
+        const filmTitles = await Promise.all(
+          starship.films.map(async (filmUrl: string) => {
+            try {
+              const filmResponse = await axios.get(filmUrl);
+              return filmResponse.data.title;
+            } catch (error) {
+              console.error("Error fetching film:", error);
+              return null;
+            }
+          })
+        ).then((titles) => titles.filter((title) => title !== null));
+
         const newStarship = new StarshipModel({
           name: starship.name,
           starshipModel: starship.model,
@@ -30,8 +56,8 @@ async function fetchAndStoreStarships() {
           hyperdrive_rating: starship.hyperdrive_rating,
           MGLT: starship.MGLT,
           starship_class: starship.starship_class,
-          pilots: starship.pilots,
-          films: starship.films,
+          pilots: pilotNames, // Use fetched pilot names
+          films: filmTitles, // Use fetched film titles
           created: new Date(starship.created),
           edited: new Date(starship.edited),
           url: starship.url,
@@ -43,10 +69,5 @@ async function fetchAndStoreStarships() {
     console.error("Error fetching and storing starships:", error);
   }
 }
-
-cron.schedule("0 0 * * *", () => {
-  console.log("Running fetchAndStoreStarships at midnight");
-  fetchAndStoreStarships();
-});
 
 export { fetchAndStoreStarships };

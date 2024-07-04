@@ -1,6 +1,5 @@
 import axios from "axios";
 import { PlanetModel } from "../../models/planet.model";
-import cron from "node-cron";
 
 async function fetchAndStorePlanets() {
   const count = await PlanetModel.countDocuments();
@@ -14,9 +13,29 @@ async function fetchAndStorePlanets() {
     while (nextPageUrl) {
       const response = await axios.get(nextPageUrl);
       const planets = response.data.results;
-      nextPageUrl = response.data.next; // Preparar la URL de la próxima página para la siguiente iteración
+      nextPageUrl = response.data.next;
 
       for (const planet of planets) {
+        let residentNames = [];
+        for (const residentUrl of planet.residents) {
+          try {
+            const residentResponse = await axios.get(residentUrl);
+            residentNames.push(residentResponse.data.name);
+          } catch (error) {
+            console.error("Error fetching resident data:", error);
+          }
+        }
+        let filmTitles = await Promise.all(
+          planet.films.map(async (filmUrl: string) => {
+            try {
+              const filmResponse = await axios.get(filmUrl);
+              return filmResponse.data.title;
+            } catch (error) {
+              console.error("Error fetching film data:", error);
+              return null;
+            }
+          })
+        ).then((titles) => titles.filter(Boolean));
         const newPlanet = new PlanetModel({
           name: planet.name,
           rotation_period: planet.rotation_period,
@@ -27,8 +46,8 @@ async function fetchAndStorePlanets() {
           terrain: planet.terrain,
           surface_water: planet.surface_water,
           population: planet.population,
-          residents: planet.residents,
-          films: planet.films,
+          residents: residentNames,
+          films: filmTitles,
           created: planet.created,
           edited: planet.edited,
           url: planet.url,
@@ -40,10 +59,5 @@ async function fetchAndStorePlanets() {
     console.error("Error fetching and storing planets:", error);
   }
 }
-
-cron.schedule("0 0 * * *", () => {
-  console.log("Running fetchAndStorePlanets at midnight");
-  fetchAndStorePlanets();
-});
 
 export { fetchAndStorePlanets };
