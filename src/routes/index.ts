@@ -6,6 +6,7 @@ import starshipsRouter from "./starshipsRouter";
 
 const router = Router();
 router.use("/people", peopleRouter);
+
 router.use("/films", filmRouter);
 router.use("/planets", planetsRouter);
 router.use("/starships", starshipsRouter);
