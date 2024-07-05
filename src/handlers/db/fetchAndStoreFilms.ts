@@ -1,5 +1,6 @@
 import axios from "axios";
 import { FilmModel } from "../../models/film.model";
+import { imageUrls } from "./data/imageUrl";
 
 async function fetchAndStoreFilms() {
   const count = await FilmModel.countDocuments();
@@ -12,6 +13,7 @@ async function fetchAndStoreFilms() {
     const films = response.data.results;
     if (films) {
       for (const film of films) {
+        const imageUrl = imageUrls[film.episode_id];
         // Fetch and store character names
         const characterNames = await Promise.all(
           film.characters.map(async (url: string) => {
@@ -92,6 +94,7 @@ async function fetchAndStoreFilms() {
           created: new Date(film.created),
           edited: new Date(film.edited),
           url: film.url,
+          imageUrl: imageUrl,
         });
         await newFilm.save();
       }

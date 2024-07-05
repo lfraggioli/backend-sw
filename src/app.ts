@@ -3,7 +3,7 @@ import router from "./routes";
 import mongoose from "mongoose";
 import { fetchAll } from "./handlers/db/fetchAll";
 var cors = require("cors");
-
+require("dotenv").config();
 const app = express();
 
 app.get("/", (req, res) => {
@@ -13,13 +13,11 @@ app.get("/", (req, res) => {
 app.use(express.json());
 app.use(router);
 app.use(cors());
-
-const MONGODB_URL =
-  "mongodb+srv://fraggiolilucas:fraggiolilucas@cluster0.l3skzfn.mongodb.net/";
+const MONGODB_URL = process.env.MONGODB_URL;
 
 mongoose.Promise = Promise;
 mongoose
-  .connect(MONGODB_URL)
+  .connect(MONGODB_URL!)
   .then(() => {
     console.log("Conexión a MongoDB exitosa");
   })
@@ -41,7 +39,7 @@ mongoose.connection.on("connected", () => {
 });
 
 if (require.main === module) {
-  const PORT = 3000;
+  const PORT = process.env.PORT || 3001;
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
   });

@@ -16,4 +16,5 @@ export const filmSchema = new Schema<IFilm>({
   created: { type: Date, required: true },
   edited: { type: Date, required: true },
   url: { type: String, required: true },
+  imageUrl: { type: String, required: true },
 });
