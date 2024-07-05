@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import app from "../../src/index";
 
 describe("GET /planets", () => {
   it("should return all planets when no name is provided", async () => {

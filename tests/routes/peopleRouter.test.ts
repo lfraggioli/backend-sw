@@ -1,5 +1,5 @@
 import request from "supertest";
-import app from "../../src/app";
+import app from "../../src/index";
 
 describe("GET /people", () => {
   it("should return all people when no name is provided", async () => {
