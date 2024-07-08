@@ -18,4 +18,5 @@ export const peopleSchema = new Schema<IPeople>({
   created: { type: Date, required: true },
   edited: { type: Date, required: true },
   url: { type: String, required: true },
+  _id: { type: String, required: true },
 });

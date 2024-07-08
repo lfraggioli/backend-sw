@@ -19,4 +19,17 @@ starshipsRouter.get("/", async (req, res) => {
   }
 });
 
+starshipsRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const starships = await getStarships();
+    const filteredStarships = starships.filter(
+      (starship) => starship._id === id
+    );
+    res.json(filteredStarships);
+  } catch (error) {
+    res.status(500).json(console.error(error));
+  }
+});
+
 export default starshipsRouter;

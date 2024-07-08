@@ -15,4 +15,6 @@ export interface IPlanet extends Document {
   created: string;
   edited: string;
   url: string;
+
+  _id: string;
 }

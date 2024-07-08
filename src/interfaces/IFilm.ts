@@ -16,4 +16,6 @@ export interface IFilm extends Document {
   edited: Date;
   url: string;
   imageUrl: string;
+
+  _id: string;
 }

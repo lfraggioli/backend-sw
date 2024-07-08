@@ -17,4 +17,5 @@ export interface IPeople extends Document {
   created: Date;
   edited: Date;
   url: string;
+  _id: string;
 }

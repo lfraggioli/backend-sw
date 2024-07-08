@@ -18,4 +18,6 @@ export const planetSchema = new Schema<IPlanet>({
   created: { type: String, required: true },
   edited: { type: String, required: true },
   url: { type: String, required: true },
+
+  _id: { type: String, required: true },
 });

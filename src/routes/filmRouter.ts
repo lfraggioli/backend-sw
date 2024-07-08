@@ -18,4 +18,17 @@ filmRouter.get("/", async (req, res) => {
   }
 });
 
+filmRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const films = await getFilms();
+    const filteredFilms = films.filter(
+      (film) => film.episode_id.toString() === id
+    );
+    res.json(filteredFilms);
+  } catch (error) {
+    res.status(500).json(console.error(error));
+  }
+});
+
 export default filmRouter;

@@ -18,4 +18,15 @@ planetsRouter.get("/", async (req, res) => {
   }
 });
 
+planetsRouter.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const planets = await getPlanets();
+    const filteredPlanets = planets.filter((planet) => planet._id === id);
+    res.json(filteredPlanets);
+  } catch (error) {
+    res.status(500).json(console.error(error));
+  }
+});
+
 export default planetsRouter;

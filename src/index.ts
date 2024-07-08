@@ -5,6 +5,7 @@ import { fetchAll } from "./handlers/db/fetchAll";
 var cors = require("cors");
 require("dotenv").config();
 const app = express();
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("API de Star Wars está funcionando!");
@@ -12,7 +13,6 @@ app.get("/", (req, res) => {
 
 app.use(express.json());
 app.use(router);
-app.use(cors());
 const MONGODB_URL = process.env.MONGODB_URL;
 
 mongoose.Promise = Promise;
